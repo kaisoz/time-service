@@ -1,32 +1,35 @@
 /* eslint-disable no-undef */
-const chai = require('chai');
-const chaiHttp = require('chai-http');
-const sinon = require('sinon');
+const chai = require("chai");
+const chaiHttp = require("chai-http");
+const sinon = require("sinon");
+const moment = require("moment-timezone");
 
-const app = require('../app');
+const app = require("../app");
 
 chai.should();
 chai.use(chaiHttp);
 
-describe('Route time/', () => {
+describe("Route time/", () => {
   beforeEach(() => {
-    this.clock = sinon.useFakeTimers(new Date('2019-09-19 19:19:19').getTime());
+    this.clock = sinon.useFakeTimers(
+      moment.tz("2019-09-19 19:19:19", "Europe/Madrid").valueOf()
+    );
   });
 
   afterEach(() => {
     this.clock.restore();
   });
 
-  it('should return 200 for a valid city/country pair', done => {
+  it("should return 200 for a valid city/country pair", done => {
     // given
-    const testCity = 'london';
-    const testCountry = 'united kingdom';
-    const expectedDateInCountry = '2019-09-19 18:19';
+    const testCity = "london";
+    const testCountry = "united kingdom";
+    const expectedDateInCountry = "2019-09-19 18:19";
 
     // when
     chai
       .request(app)
-      .post('/time')
+      .post("/time")
       .send({
         city: testCity,
         country: testCountry
@@ -38,13 +41,13 @@ describe('Route time/', () => {
       });
   });
 
-  it('should return 500 for an invalid city/country pair', done => {
-    const testCity = 'london';
-    const testCountry = 'foo';
+  it("should return 500 for an invalid city/country pair", done => {
+    const testCity = "london";
+    const testCountry = "foo";
 
     chai
       .request(app)
-      .post('/time')
+      .post("/time")
       .send({
         city: testCity,
         country: testCountry

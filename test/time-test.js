@@ -1,24 +1,27 @@
 /* eslint-disable no-undef */
-const expect = require('chai').expect;
-const sinon = require('sinon');
-const time = require('../time');
+const expect = require("chai").expect;
+const sinon = require("sinon");
+const time = require("../time");
 
-require('chai').should();
+const moment = require("moment-timezone");
+require("chai").should();
 
-describe('getTimeFor', () => {
+describe("getTimeFor", () => {
   beforeEach(() => {
-    this.clock = sinon.useFakeTimers(new Date('2019-09-19 19:19:19').getTime());
+    this.clock = sinon.useFakeTimers(
+      moment.tz("2019-09-19 19:19:19", "Europe/Madrid").valueOf()
+    );
   });
 
   afterEach(() => {
     this.clock.restore();
   });
 
-  it('should return the correct time for a given timezone', () => {
+  it("should return the correct time for a given timezone", () => {
     // given
-    const city = 'london';
-    const country = 'united kingdom';
-    const expectedDateInCountry = '2019-09-19 18:19';
+    const city = "london";
+    const country = "united kingdom";
+    const expectedDateInCountry = "2019-09-19 18:19";
 
     // when
     const dateInCountry = time.getTimeFor(city, country);
@@ -27,24 +30,24 @@ describe('getTimeFor', () => {
     dateInCountry.should.equal(expectedDateInCountry);
   });
 
-  it('should throw an exception if not all the parameters are passed', () => {
+  it("should throw an exception if not all the parameters are passed", () => {
     // given
-    const city = 'london';
+    const city = "london";
 
     // then
     expect(() => {
       time.getTimeFor(city);
-    }).to.throw('Invalid input data');
+    }).to.throw("Invalid input data");
   });
 
-  it('should throw an exception when any input parameter is invalid', () => {
+  it("should throw an exception when any input parameter is invalid", () => {
     // given
-    const city = 'london';
-    const country = 'fake country';
+    const city = "london";
+    const country = "fake country";
 
     // then
     expect(() => {
       time.getTimeFor(city, country);
-    }).to.throw('Invalid input data');
+    }).to.throw("Invalid input data");
   });
 });
