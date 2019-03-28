@@ -1,0 +1,5 @@
+node_modules
+coverage/
+*.code-workspace
+package-lock.json
+*.sh
